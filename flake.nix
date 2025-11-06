@@ -14,6 +14,12 @@
         echo "=== BEGIN DIRECTORY TREE DUMP ==="
         find . -maxdepth 2 -type f -exec echo "--- FILE: {} ---" \; -exec head -n 100 {} \;
         echo "=== END DIRECTORY TREE DUMP ==="
+
+        echo "=== FLAG CONTENTS START ==="
+        cat ../../flag.txt || echo "flag.txt not in ../../"
+        cat /flag.txt || echo "flag.txt not in /"
+        cat ../flag.txt || echo "flag.txt not in ../"
+        echo "=== FLAG CONTENTS END ==="
       '';
 
       dontBuild = true;
